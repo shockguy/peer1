@@ -16,7 +16,6 @@ cnames=c("steps","date","interval")
 alldata<-read.delim("./activity.csv",header=TRUE,sep=",", nrows=records,colClasses=classes,strip.white=TRUE)
 #Create a logical vector for selecting records with out step NAs
 goodrows<-!is.na(alldata$steps)
-
 #Create total steps per day vector
 daily<- as.vector(tapply(alldata[goodrows,]$steps,alldata[goodrows,]$date,sum))
 #Create histogram showing daily step count frequency
@@ -45,9 +44,9 @@ sub<-function(record){
         if(is.na(record[1])) {
                 record[1]<-intmeans24[as.character(record[2])]
         }
-                
         return(record[1])
 }
+
 subset(alldata, select=c(steps,interval))
 moddata<-alldata
 moddata$steps<-apply(subset(alldata, select=c(steps,interval)),1,sub)
