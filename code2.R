@@ -3,7 +3,13 @@
 #Code for Peer1 Assignment in RepoResearch
 #This code will end up in a Markdown document
 
-setwd("~/Documents/DS_track/Repo/peer1")
+library("markdown", lib.loc="/Library/Frameworks/R.framework/Versions/3.2/Resources/library")
+library("lattice", lib.loc="/Library/Frameworks/R.framework/Versions/3.2/Resources/library")
+library("knitr", lib.loc="/Library/Frameworks/R.framework/Versions/3.2/Resources/library")
+library("htmltools", lib.loc="/Library/Frameworks/R.framework/Versions/3.2/Resources/library")
+library("rmarkdown", lib.loc="/Library/Frameworks/R.framework/Versions/3.2/Resources/library")
+
+setwd("~/Documents/DS_track/Repo/peer1/peer1")
 
 #Set number of record/lines.  Given in instructions, checked with 'wc' at command line
 records=17568
@@ -19,7 +25,7 @@ goodrows<-!is.na(alldata$steps)
 #Create total steps per day vector
 daily<- as.vector(tapply(alldata[goodrows,]$steps,alldata[goodrows,]$date,sum))
 #Create histogram showing daily step count frequency
-hist(daily,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of Days")
+hist(daily,breaks=10,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of Days")
 #Determine the mean and median daily steps, ignoring NAs
 dailymean<-mean(daily)
 dailymedian<-median(daily)
@@ -52,8 +58,36 @@ moddata<-alldata
 moddata$steps<-apply(subset(alldata, select=c(steps,interval)),1,sub)
 
 moddaily<- as.vector(tapply(moddata$steps,moddata$date,sum))
-hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
+hist(moddaily,breaks=10,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
 moddailymean<-mean(moddaily)
 moddailymedian<-median(moddaily)
 
 NAcount<-records-sum(goodrows)
+
+
+daytype<-function(testday){
+        MF<-c('Monday','Tuesday','Wednesday','Thursday','Friday')
+        if(testday %in% MF) {
+                testday<-"weekday"
+        }
+        else {
+                testday<-"weekend"
+        }
+        return(testday)
+}
+
+moddata$daytype<-as.factor(sapply(moddata$day, daytype))
+
+intwkdmean<-tapply(moddata[moddata$daytype=='weekday',]$steps,moddata[moddata$daytype=='weekday',]$interval,mean)
+intwkemean<-tapply(moddata[moddata$daytype=='weekend',]$steps,moddata[moddata$daytype=='weekend',]$interval,mean)
+
+xyplot(steps~interval | daytype ,moddata, layout=c(1,2),aspect='fill', panel=function(x,y){
+               panel.xyplot(x,y)
+               panel.average(x,y,horizontal = FALSE,col.line = 'red',lwd=5)
+       })
+
+
+
+
+
+
