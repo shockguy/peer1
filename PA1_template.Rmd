@@ -57,7 +57,7 @@ which.max(intmeans24)
 Here is a plot of average steps for each interval.  
 ```{r, echo=TRUE}
 #Plot the mean number of steps on an interval basis
-plot(intmeans24,type='l')
+plot(intmeans24,type='l',xlab="Interval (5-minute increment)",ylab="Mean Steps",main="Interval Step Average Across 2 Months")
 ```
 
 The data is modified to substitute something meaningful in for the 2304 NA step entries.
@@ -89,4 +89,4 @@ Histogram of modified daily steps is just below.
 hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
 ```
 
-Modification of the data resulted in basically no change in the data trends or magnitudes.
+Modification of the data resulted in basically no change in the data trends.  Day frequency count is up, reflecting a more complete data record.
