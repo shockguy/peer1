@@ -41,16 +41,17 @@ The mean total steps was 10766.189, and the median 10765.
 Just below is the histogram for total daily steps.  NA were omitted.
 ```{r, echo=TRUE}
 #Create histogram showing daily step count frequency
-hist(daily,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of Days")
+hist(daily,breaks=10,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of Days")
 ```
 
-The greatest number of step was typically taken between 835 and 840 AM, with 104 steps on average for the entire 2 month period.  NAs were omitted.
+The greatest number of step was typically taken between 835 and 840 AM, with about 206 steps on average for the entire 2 month period.  NAs were omitted.
 ```{r, echo=TRUE}
 #Determine the mean for each interval.  This will be used to fill in the step NAs.  
 #This totally ignores day/week/month differences that might exist, and any trends in activity. 
 #Ignoring these simplifies the analysis for the sake of the exercise.
 intmeans24<-tapply(alldata$steps,alldata$interval,mean,na.rm=TRUE)
 #Determine what interval sees the highest mean number of steps
+max(intmeans24)
 which.max(intmeans24)
 ```
 
@@ -86,7 +87,7 @@ The modified daily median is up slightly to 10766.189.
 
 Histogram of modified daily steps is just below.
 ```{r, echo=TRUE}
-hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
+hist(moddaily,breaks=10,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
 ```
 
 Modification of the data resulted in basically no change in the data trends.  Day frequency count is up, reflecting a more complete data record.
