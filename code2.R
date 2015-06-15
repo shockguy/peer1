@@ -56,3 +56,4 @@ hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps
 moddailymean<-mean(moddaily)
 moddailymedian<-median(moddaily)
 
+NAcount<-records-sum(goodrows)

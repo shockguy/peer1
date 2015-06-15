@@ -33,15 +33,18 @@ daily<- as.vector(tapply(alldata[goodrows,]$steps,alldata[goodrows,]$date,sum))
 #Determine the mean and median daily steps, ignoring NAs
 dailymean<-mean(daily)
 dailymedian<-median(daily)
+dailymean
+dailymedian
 ```
 The mean total steps was 10766.189, and the median 10765.
 
-Just below is the histogram for total daily steps.
+Just below is the histogram for total daily steps.  NA were omitted.
 ```{r, echo=TRUE}
 #Create histogram showing daily step count frequency
 hist(daily,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of Days")
 ```
 
+The greatest number of step was typically taken between 835 and 840 AM, with 104 steps on average for the entire 2 month period.  NAs were omitted.
 ```{r, echo=TRUE}
 #Determine the mean for each interval.  This will be used to fill in the step NAs.  
 #This totally ignores day/week/month differences that might exist, and any trends in activity. 
@@ -49,11 +52,16 @@ hist(daily,main="Histogram of Daily Step Count",xlab="Steps/Day",ylab="Number of
 intmeans24<-tapply(alldata$steps,alldata$interval,mean,na.rm=TRUE)
 #Determine what interval sees the highest mean number of steps
 which.max(intmeans24)
+```
+
+Here is a plot of average steps for each interval.  
+```{r, echo=TRUE}
 #Plot the mean number of steps on an interval basis
 plot(intmeans24,type='l')
 ```
 
-
+The data is modified to substitute something meaningful in for the 2304 NA step entries.
+I chose average for each interval across the 2 month period. Zero (0) was assumed in the case of NA for intervals across the entire time.
 ```{r, echo=TRUE}
 sub<-function(record){
         
@@ -66,7 +74,19 @@ moddata<-alldata
 moddata$steps<-apply(subset(alldata, select=c(steps,interval)),1,sub)
 
 moddaily<- as.vector(tapply(moddata$steps,moddata$date,sum))
-hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
+#Count of NA values
+NAcount<-records-sum(goodrows)
 moddailymean<-mean(moddaily)
+moddailymean
 moddailymedian<-median(moddaily)
+moddailymedian
 ```
+The modified daily mean, 10766.189 is basically identical to the unmodified data mean.
+The modified daily median is up slightly to 10766.189.
+
+Histogram of modified daily steps is just below.
+```{r, echo=TRUE}
+hist(moddaily,main="Histogram of Daily Step Count For Modified Data",xlab="Steps/Day",ylab="Number of Days")
+```
+
+Modification of the data resulted in basically no change in the data trends or magnitudes.
